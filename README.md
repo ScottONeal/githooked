@@ -1,6 +1,6 @@
 # githooked
 
-[![Build Status](https://travis-ci.org/ScottONeal/githooked.svg?branch=master)](https://travis-ci.org/ScottONeal/githooked)
+[![Build Status](https://api.travis-ci.org/ScottONeal/githooked.svg)](http://travis-ci.org/ScottONeal/githooked)
 
 ## Intro
 
