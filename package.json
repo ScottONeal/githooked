@@ -1,26 +1,30 @@
 {
-  "name": "hookshot",
+  "name": "githooked",
   "author": "Marco Aurelio <thecoreh@gmail.com>",
-  "version": "0.1.0",
+  "contributors": [
+    "Scott ONeal <scottmod@gmail.com> (https://github.com/ScottONeal)"
+  ],
+  "version": "1.0.0",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/coreh/hookshot.git"
+    "url": "https://github.com/ScottONeal/githooked.git"
   },
   "scripts": {
     "test": "node_modules/.bin/mocha"
   },
   "dependencies": {
-    "express": "~4.9.0",
-    "commander": "~2.3.0",
-    "lockfile": "~1.0.0",
-    "body-parser": "~1.8.2"
+    "express": "^4.13.0",
+    "commander": "^2.9.0",
+    "lockfile": "^1.0.0",
+    "body-parser": "^1.14.0"
   },
   "main": "lib",
   "bin": {
-    "hookshot": "./bin/hookshot"
+    "githooked": "./bin/githooked"
   },
   "devDependencies": {
-    "mocha": "^2.2.5",
-    "supertest": "^1.0.1"
+    "mocha": "^2.3.0",
+    "supertest": "^1.1.0"
   }
 }

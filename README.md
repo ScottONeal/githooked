@@ -1,40 +1,36 @@
-# hookshot
-
-![](http://i.cloudup.com/i_vGKjtQcY2.png)
-
-"You found the *hookshot*! It's a spring-loaded chain that you can cast out to hook things."
+# githooked
 
 ## Intro
 
-**hookshot** is a tiny library and companion CLI tool for handling [GitHub post-receive hooks](https://help.github.com/articles/post-receive-hooks).
+**githooked** is a tiny library and companion CLI tool for handling [GitHub post-receive hooks](https://help.github.com/articles/post-receive-hooks). This repo is a fork of https://github.com/coreh/hookshot and was created since the author of hookshot was innactive.
 
 ## Examples
 
 ### Library
 
 ```javascript
-var hookshot = require('hookshot');
-hookshot('refs/heads/master', 'git pull && make').listen(3000)
+var githooked = require('githooked');
+githooked('refs/heads/master', 'git pull && make').listen(3000)
 ```
 
 ### CLI Tool
 
 ```bash
-hookshot -r refs/heads/master 'git pull && make'
+githooked -r refs/heads/master 'git pull && make'
 ```
 
 ## Usage
 
-The library exposes a single function, `hookshot()`. When called, this functions returns an express instance configured to handle post-receive hooks from GitHub. You can react to pushes to specific branches by listening to specific events on the returned instance, or by providing optional arguments to the `hookshot()` function.
+The library exposes a single function, `githooked()`. When called, this functions returns an express instance configured to handle post-receive hooks from GitHub. You can react to pushes to specific branches by listening to specific events on the returned instance, or by providing optional arguments to the `githooked()` function.
 
 ```javascript
-hookshot()
+githooked()
 .on('refs/heads/master', 'git pull && make')
 .listen(3000)
 ```
 
 ```javascript
-hookshot('refs/heads/master', 'git pull && make').listen(3000)
+githooked('refs/heads/master', 'git pull && make').listen(3000)
 ```
 
 ### Actions
@@ -42,22 +38,22 @@ hookshot('refs/heads/master', 'git pull && make').listen(3000)
 Actions can either be shell commands or JavaScript functions.
 
 ```javascript
-hookshot('refs/heads/master', 'git pull && make').listen(3000)
+githooked('refs/heads/master', 'git pull && make').listen(3000)
 ```
 
 ```javascript
-hookshot('refs/heads/master', function(info) {
+githooked('refs/heads/master', function(info) {
   // do something with push info ...
 }).listen(3000)
 ```
 
 ### Mounting to existing express servers
 
-**hookshot** can be mounted to a custom route on your existing express server:
+**githooked** can be mounted to a custom route on your existing express server:
 
 ```javascript
 // ...
-app.use('/my-github-hook', hookshot('refs/heads/master', 'git pull && make'));
+app.use('/my-github-hook', githooked('refs/heads/master', 'git pull && make'));
 // ...
 ```
 
@@ -66,7 +62,7 @@ app.use('/my-github-hook', hookshot('refs/heads/master', 'git pull && make'));
 Special events are fired when branches/tags are created, deleted:
 
 ```javascript
-hookshot()
+githooked()
 .on('create', function(info) {
   console.log('ref ' + info.ref + ' was created.')
 })
@@ -78,7 +74,7 @@ hookshot()
 The `push` event is fired when a push is made to any ref:
 
 ```javascript
-hookshot()
+githooked()
 .on('push', function(info) {
   console.log('ref ' + info.ref + ' was pushed.')
 })
@@ -87,7 +83,7 @@ hookshot()
 Finally, the `hook` event is fired for every post-receive hook that is send by GitHub.
 
 ```javascript
-hookshot()
+githooked()
 .on('push', function(info) {
   console.log('ref ' + info.ref + ' was pushed.')
 })
@@ -95,10 +91,10 @@ hookshot()
 
 ### Spawn Event
 
-If hookshot was created with a shell command as the action, it will throw a spawn event with the child_process spawn instance.
+If githooked was created with a shell command as the action, it will throw a spawn event with the child_process spawn instance.
 
 ```javascript
-var server = hookshot('refs/head/master', 'git pull && make').listen(3000);
+var server = githooked('refs/head/master', 'git pull && make').listen(3000);
 
 server.on('spawn', function(spawn) {
   // Bind on close to get exit code
@@ -112,20 +108,20 @@ server.on('spawn', function(spawn) {
 
 ### CLI Tool
 
-A companion CLI tool is provided for convenience. To use it, install **hookshot** via npm using the `-g` flag:
+A companion CLI tool is provided for convenience. To use it, install **githooked** via npm using the `-g` flag:
 
 ```bash
-npm install -g hookshot
+npm install -g githooked
 ```
 
 The CLI tool takes as argument a command to execute upon GitHub post-receive hook:
 
 ```bash
-hookshot 'echo "PUSHED!"'
+githooked 'echo "PUSHED!"'
 ```
 
 You can optionally specify an HTTP port via the `-p` flag (defaults to 3000) and a ref via the `-r` flag (defaults to all refs):
 
 ```bash
-hookshot -r refs/heads/master -p 9001 'echo "pushed to master!"'
+githooked -r refs/heads/master -p 9001 'echo "pushed to master!"'
 ```

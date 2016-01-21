@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-var fs = require('fs');
-var path = require('path');
+var fs      = require('fs');
+var path    = require('path');
 var program = require('commander');
 
 program
@@ -11,7 +11,7 @@ program
   .option('-r, --ref <n>', 'Ref to look for (defaults to all refs)')
   .parse(process.argv);
 
-var hookshot = require('../lib');
+var githooked = require('../lib');
 
 if (program.args.length == 0) {
   program.help();
@@ -19,6 +19,6 @@ if (program.args.length == 0) {
 
 var action = program.args.join(' ');
 
-hookshot(program.ref || 'hook', action).listen(program.port || 3000);
+githooked(program.ref || 'hook', action).listen(program.port || 3000);
 
 

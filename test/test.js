@@ -1,15 +1,17 @@
+'use strict';
+
 var assert    = require('assert'),
     supertest = require('supertest'),
-    hookshot  = require('../lib');
+    githooked = require('../lib');
 
 process.env.NODE_ENV = 'test';
 
-describe('hookshot server', function() {
+describe('githooked server', function() {
 
   var server, request;
 
   beforeEach(function() {
-     server = hookshot('test', 'exit 1'),
+     server  = githooked('test', 'exit 1');
      request = supertest(server);
   });
 
@@ -17,15 +19,11 @@ describe('hookshot server', function() {
     request
       .post('/')
       .set('Accept', 'application/json')
-      .send({})
-      .end(function(err) {
-        assert(err instanceof Error);
-        done();
-      });
+      .send('asdf')
+      .expect(500, done);
   });
 
   it('should emit an error on invalid payload', function(done) {
-
     server.on('error', function(err) {
       assert(err instanceof Error);
       done();
@@ -52,7 +50,7 @@ describe('hookshot server', function() {
       .set('Accept', 'application/json')
       .send({ ref: 'test', created: true })
       .expect(202)
-      .end(function(err, res) {
+      .end(function(err) {
         assert(!err);
       });
   });
@@ -68,7 +66,7 @@ describe('hookshot server', function() {
       .set('Accept', 'application/json')
       .send({ ref: 'test', deleted: true })
       .expect(202)
-      .end(function(err, res) {
+      .end(function(err) {
         assert(!err);
       });
   });
@@ -84,13 +82,13 @@ describe('hookshot server', function() {
       .set('Accept', 'application/json')
       .send({ ref: 'test' })
       .expect(202)
-      .end(function(err, res) {
+      .end(function(err) {
         assert(!err);
       });
   });
 
   it('should get reference event with payload on hook', function(done) {
-    server.on('test', function(payload) {
+    server.on('test', function() {
       done();
     });
 
@@ -99,7 +97,7 @@ describe('hookshot server', function() {
       .set('Accept', 'application/json')
       .send({ ref: 'test' })
       .expect(202)
-      .end(function(err, res) {
+      .end(function(err) {
         assert(!err);
       });
 
@@ -119,9 +117,8 @@ describe('hookshot server', function() {
       .set('Accept', 'application/json')
       .send({ ref: 'test' })
       .expect(202)
-      .end(function(err, res) {
+      .end(function(err) {
         assert(!err);
       });
   });
 });
-
