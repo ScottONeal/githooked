@@ -1,5 +1,7 @@
 # githooked
 
+[![Build Status](https://travis-ci.org/ScottONeal/githooked.svg?branch=master)](https://travis-ci.org/ScottONeal/githooked)
+
 ## Intro
 
 **githooked** is a tiny library and companion CLI tool for handling [GitHub post-receive hooks](https://help.github.com/articles/post-receive-hooks). This repo is a fork of https://github.com/coreh/hookshot and was created since the author of hookshot was innactive.
