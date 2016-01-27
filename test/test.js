@@ -15,6 +15,15 @@ describe('githooked server', function() {
      request = supertest(server);
   });
 
+  it('should send a 200 back for a PING event', function(done) {
+    request
+      .post('/')
+      .set('X-GitHub-Event', 'ping')
+      .set('Accept', 'application/json')
+      .send({zen: 'thisisatest', hook_id: 'thisisatest', hook: 'thisisatest'})
+      .expect(200, done);
+  });
+
   it('should throw an error on invalid payload', function(done) {
     request
       .post('/')
