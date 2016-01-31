@@ -4,7 +4,7 @@
 
 ## Intro
 
-**githooked** is a tiny library and companion CLI tool for handling [GitHub post-receive hooks](https://help.github.com/articles/post-receive-hooks). This repo is a fork of https://github.com/coreh/hookshot and was created since the author of hookshot was innactive.
+**githooked** is a tiny library and companion CLI tool for handling [GitHub webhooks hooks](https://help.github.com/articles/about-webhooks/). This repo is a fork of https://github.com/coreh/hookshot and was created since the author of hookshot was innactive.
 
 ## Examples
 
@@ -23,19 +23,36 @@ githooked -r refs/heads/master 'git pull && make'
 
 ## Usage
 
-The library exposes a single function, `githooked()`. When called, this functions returns an express instance configured to handle post-receive hooks from GitHub. You can react to pushes to specific branches by listening to specific events on the returned instance, or by providing optional arguments to the `githooked()` function.
+The library exposes a single function, `githooked()`. When called, this functions returns an express instance configured to handle webhooks pushes from GitHub. You can react to pushes to specific branches by listening to specific events on the returned instance, or by providing optional arguments to the `githooked()` function.
 
 ```javascript
 githooked()
-.on('refs/heads/master', 'git pull && make')
-.listen(3000)
+  .on('refs/heads/master', 'git pull && make')
+  .listen(3000)
 ```
 
 ```javascript
 githooked('refs/heads/master', 'git pull && make').listen(3000)
 ```
 
-### Actions
+## Arguments
+
+GitHooked supports up to three arguments: reference, action, and options. The first argument is the branch reference from the GitHooked webhook (i.e: `refs/heads/master`). If only one argument is supplied, it should be the action that needs to be ran. In this instance githooked will bind to every webhook event sent from GitHub.
+
+```js
+githooked('branch/references', 'action', { /* options */});
+```
+
+### Reference
+
+References are specific webhook references or actions fired when editing tags or branches changes happen. This argument is provided so you can bind to specific branch or the following event hooks:
+
+ - **hook**: This will bind to all webhooks
+ - **create**: fired on [create events](https://developer.github.com/v3/activity/events/types/#createevent)
+ - **delete**: fired on [delete events](https://developer.github.com/v3/activity/events/types/#deleteevent)
+ - **push**: fired on [push events](https://developer.github.com/v3/activity/events/types/#pushevent)
+
+### Action
 
 Actions can either be shell commands or JavaScript functions.
 
@@ -48,6 +65,44 @@ githooked('refs/heads/master', function(info) {
   // do something with push info ...
 }).listen(3000)
 ```
+
+### Options
+
+Lastly, the third option is an object of configuration parameters. Usage:
+
+```js
+githooked('push', 'git pull && make', {
+  json: {
+    limit: '100mb',
+    strict: true
+  },
+  middleware: [
+    require('connect-timeout'),
+    function(req, res, next) {
+      // Do something
+      next();
+    }
+  ]
+}})
+```
+
+The following configuration options are:
+
+#### json (Object)
+
+These are arguments passed to express's [body-parsers json() middleware](https://github.com/expressjs/body-parser#bodyparserjsonoptions)
+
+#### middleware (Function|Array[Function])
+
+This is an array or function of valid [express middleware](http://expressjs.com/en/guide/using-middleware.html). This middleware will be applied before any other express middleware. If an array is provided, the middleware will be applied in the order they are declared in the array.
+
+#### secret (String) TODO
+
+GitHub webhooks can pass a secret which is used as an authentication mechnicism between your GitHub repo and your githooked server.
+
+#### logFile (String|stream) TODO
+
+If your action is a shell call, then this option will log all STDOUT and STDERR into the provided stream or file descriptor
 
 ### Mounting to existing express servers
 
