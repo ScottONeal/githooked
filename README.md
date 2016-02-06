@@ -6,6 +6,8 @@
 
 **githooked** is a tiny library and companion CLI tool for handling [GitHub webhooks hooks](https://help.github.com/articles/about-webhooks/). This repo is a fork of https://github.com/coreh/hookshot and was created since the author of hookshot was innactive.
 
+When setting up webhooks in your githooked dashboard, the types of events that should be sent to githooked should be set to: 'Just the push event'
+
 ## Examples
 
 ### Library
