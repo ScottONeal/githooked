@@ -96,9 +96,9 @@ These are arguments passed to express's [body-parsers json() middleware](https:/
 
 This is an array or function of valid [express middleware](http://expressjs.com/en/guide/using-middleware.html). This middleware will be applied before any other express middleware. If an array is provided, the middleware will be applied in the order they are declared in the array.
 
-#### secret (String) TODO
+#### secret (String)
 
-GitHub webhooks can pass a secret which is used as an validation mechanism between your GitHub repo and your githooked server. Read more about it [here](https://developer.github.com/v3/repos/hooks/#create-a-hook). Validation of the payload will be the first operation performed on incoming requests. If using githooked for any serious purposes this option should be necessary. If validation failed an error event will be called with value of 'signature validation failed':
+GitHub webhooks can pass a secret which is used as an validation mechanism between your GitHub repo and your githooked server. Read more about it [here](https://developer.github.com/v3/repos/hooks/#create-a-hook). Validation of the payload will be the first operation performed on incoming requests. If using githooked for any serious purposes this option should be necessary. If validation failed an error event will be called with value of 'signature validation failed' or 'no provider signature':
 
 ```js
   githooked.on('error', function(msg) {
