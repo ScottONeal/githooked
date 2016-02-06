@@ -1,8 +1,8 @@
 # githooked
 
-[![Build Status](https://api.travis-ci.org/ScottONeal/githooked.svg)](http://travis-ci.org/ScottONeal/githooked)
+A GitHub webhooks worker!
 
-## Intro
+[![Build Status](https://api.travis-ci.org/ScottONeal/githooked.svg)](http://travis-ci.org/ScottONeal/githooked)
 
 **githooked** is a tiny library and companion CLI tool for handling [GitHub webhooks hooks](https://help.github.com/articles/about-webhooks/). This repo is a fork of https://github.com/coreh/hookshot and was created since the author of hookshot was innactive.
 

@@ -4,12 +4,13 @@
   "contributors": [
     "Scott ONeal <scottmod@gmail.com> (https://github.com/ScottONeal)"
   ],
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/ScottONeal/githooked.git"
   },
+  "keywords": ["github", "webhooks", "continuous deployment", "continuous integration", "strider-cd", "simple cd", "simple ci"],
   "scripts": {
     "test": "node_modules/.bin/mocha"
   },
