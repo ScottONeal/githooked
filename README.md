@@ -98,7 +98,15 @@ This is an array or function of valid [express middleware](http://expressjs.com/
 
 #### secret (String) TODO
 
-GitHub webhooks can pass a secret which is used as an authentication mechnicism between your GitHub repo and your githooked server.
+GitHub webhooks can pass a secret which is used as an validation mechanism between your GitHub repo and your githooked server. Read more about it [here](https://developer.github.com/v3/repos/hooks/#create-a-hook). Validation of the payload will be the first operation performed on incoming requests. If using githooked for any serious purposes this option should be necessary. If validation failed an error event will be called with value of 'signature validation failed':
+
+```js
+  githooked.on('error', function(msg) {
+    if ( msg === 'signature validation failed' ) {
+      // do something
+    }
+  })
+```
 
 #### logFile (String|stream) TODO
 

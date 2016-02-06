@@ -2,11 +2,12 @@
 
 var assert    = require('assert'),
     supertest = require('supertest'),
-    githooked = require('../lib');
+    githooked = require('../lib'),
+    crypto    = require('crypto');
 
 process.env.NODE_ENV = 'test';
 
-describe('githooked server', function() {
+describe('githooked initialization', function() {
 
   var server, request;
 
@@ -109,6 +110,77 @@ describe('githooked server', function() {
       });
 
   });
+});
+
+describe('githooked secret validation', function() {
+
+  it('should throw an error if secret is not a string', function() {
+    assert.throws(function() {
+      githooked('test', 'exit 1', { secret: [] });
+    }, Error);
+  });
+
+  it('should emit an error if secret not sent from provider', function(done) {
+    var scopedServer = githooked('test', 'exit 1', { secret: 'test-secret' });
+
+    supertest(scopedServer)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .send({ ref: 'test' })
+      .expect(401)
+      .end(function(err) {
+        if ( err ) { done(err); }
+      });
+
+      scopedServer.on('error', function(msg) {
+        assert.equal(msg, 'no provider signature');
+        done();
+      });
+  });
+
+  it('should send a 401 if signatures do not match', function(done) {
+    var secret       = 'test-secret',
+        body         = { ref: 'test'},
+        scopedServer = githooked('test', 'exit 1', { secret: secret });
+
+    supertest(scopedServer)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .set('X-Hub-Signature', 'thisisabadsignature')
+      .send(body)
+      .expect(401)
+      .end(function(err) {
+        if ( err ) { done(err); }
+      });
+
+    scopedServer.on('error', function(msg) {
+      assert.equal(msg, 'signature validation failed');
+      done();
+    });
+  });
+
+  it('should send a 202 if signature validations match', function(done) {
+    var secret       = 'test-secret',
+        body         = { ref: 'test'},
+        scopedServer = githooked('test', 'exit 1', { secret: secret });
+
+    supertest(scopedServer)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .set('X-Hub-Signature', createSignature(secret, JSON.stringify(body)))
+      .send(body)
+      .expect(202, done);
+  });
+});
+
+describe('githooked server', function() {
+
+  var server, request;
+
+  beforeEach(function() {
+     server  = githooked('test', 'exit 1');
+     request = supertest(server);
+  });
 
   it('should send a 200 back for a PING event', function(done) {
     request
@@ -128,8 +200,8 @@ describe('githooked server', function() {
   });
 
   it('should emit an error on invalid payload', function(done) {
-    server.on('error', function(err) {
-      assert(err instanceof Error);
+    server.on('error', function(msg) {
+      assert.equal(msg, 'invalid ref');
       done();
     });
 
@@ -226,3 +298,7 @@ describe('githooked server', function() {
       });
   });
 });
+
+function createSignature(secret, body) {
+  return 'sha1=' + crypto.createHmac('sha1', secret).update(body).digest('hex');
+}
