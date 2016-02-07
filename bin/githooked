@@ -17,7 +17,8 @@ var githooked = require('../lib');
 
 if (!program.hookaction && program.args.length == 0) {
   console.log('\n  No action provided!')
-  program.help();
+  program.outputHelp();
+  process.exit(1);
 }
 
 var action  = program.hookaction || program.args.join(' '),
