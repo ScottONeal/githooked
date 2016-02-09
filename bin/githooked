@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+'use strict';
 
 var fs      = require('fs'),
     path    = require('path'),
@@ -15,8 +16,8 @@ program
 
 var githooked = require('../lib');
 
-if (!program.hookaction && program.args.length == 0) {
-  console.log('\n  No action provided!')
+if (!program.hookaction && program.args.length === 0) {
+  console.log('\n  No action provided!');
   program.outputHelp();
   process.exit(1);
 }
@@ -24,4 +25,6 @@ if (!program.hookaction && program.args.length == 0) {
 var action  = program.hookaction || program.args.join(' '),
     options = program.secret ? { secret: program.secret } : {};
 
-githooked(program.ref || 'hook', action, options).listen(program.port || 3000);
+githooked(program.ref || 'hook', action, options).listen(program.port || 3000, function() {
+  console.log('githooked server started on', this.address().port);
+});

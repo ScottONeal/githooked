@@ -10,7 +10,15 @@
     "type": "git",
     "url": "https://github.com/ScottONeal/githooked.git"
   },
-  "keywords": ["github", "webhooks", "continuous deployment", "continuous integration", "strider-cd", "simple cd", "simple ci"],
+  "keywords": [
+    "github",
+    "webhooks",
+    "continuous deployment",
+    "continuous integration",
+    "strider-cd",
+    "simple cd",
+    "simple ci"
+  ],
   "scripts": {
     "test": "node_modules/.bin/mocha"
   },
@@ -25,7 +33,9 @@
     "githooked": "./bin/githooked"
   },
   "devDependencies": {
+    "getport": "^0.1.0",
     "mocha": "^2.3.0",
+    "superagent": "^1.7.2",
     "supertest": "^1.1.0"
   }
 }
