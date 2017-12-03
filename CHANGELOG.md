@@ -1,3 +1,8 @@
+1.1.2 / 2017-11-30
+==================
+
+  * Validate secret using a constant-time comparison to avoid timing attacks.
+
 1.1.1 / 2015-02-06
 ==================
 
